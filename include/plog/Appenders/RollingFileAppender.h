@@ -95,15 +95,17 @@ namespace plog
             util::nstring fileName = buildFileName();
             m_fileSize = m_file.open(fileName.c_str());
 
-            if (0 == m_fileSize)
-            {
-                size_t bytesWritten = m_file.write(Converter::header(Formatter::header()));
-
-                if (static_cast<size_t>(-1) != bytesWritten)
+#ifndef __MVS__
+                if (0 == m_fileSize)
                 {
-                    m_fileSize += bytesWritten;
+                    size_t bytesWritten = m_file.write(Converter::header(Formatter::header()));
+
+                    if (static_cast<size_t>(-1) != bytesWritten)
+                    {
+                        m_fileSize += bytesWritten;
+                    }
                 }
-            }
+#endif
         }
 
         util::nstring buildFileName(int fileNumber = 0)

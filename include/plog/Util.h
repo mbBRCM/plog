@@ -52,6 +52,9 @@
 #   if PLOG_ENABLE_WCHAR_INPUT
 #       include <iconv.h>
 #   endif
+#elif defined(__MVS__)
+#   include <sys/time.h>
+#   include <pthread.h>
 #else
 #   include <unistd.h>
 #   include <sys/syscall.h>
@@ -147,6 +150,9 @@ namespace plog
             return static_cast<unsigned int>(tid);
 #elif defined(__rtems__)
             return rtems_task_self();
+#elif defined(__MVS__)
+            pthread_t threadId = pthread_self();
+            return static_cast<unsigned int>(threadId.__);
 #elif defined(__APPLE__)
             uint64_t tid64;
             pthread_threadid_np(NULL, &tid64);
